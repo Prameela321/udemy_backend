@@ -19,6 +19,21 @@ const sendEmail = async (options) => {
       pass: process.env.MAILTRAP_PASSWORD,
     },
   });
+
+  const mail = {
+    from: "mail.taskmanager@example.com",
+    to: options.email,
+    subject: options.subject,
+    text: emailTextual,
+    html: emailHtml,
+  };
+  try {
+    await transporter.sendMail(mail);
+  } catch (err) {
+    console.log(
+      "email service failed silently make sure that you have provided your mail trap credentials in the .env file"
+    );
+  }
 };
 const emailVerificationMailGenContent = (username, verificationUrl) => {
   return {
@@ -40,4 +55,4 @@ const emailVerificationMailGenContent = (username, verificationUrl) => {
   };
 };
 
-export { emailVerificationMailGenContent };
+export { emailVerificationMailGenContent, sendEmail };

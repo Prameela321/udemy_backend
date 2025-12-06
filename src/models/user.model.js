@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 const userSchema = new Schema(
   {
     avatar: {
@@ -73,7 +74,7 @@ userSchema.methods.verifyPassword = async function (password) {
 
 userSchema.methods.generateAcessToken = function () {
   return jwt.sign(
-    { _id: this._id, email: this.email, username: this.username },
+    { _id: this._id, email: this.email, usernamde: this.username },
     process.env.ACCESS_TOKEN_SECRET,
     { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
   );
@@ -81,8 +82,8 @@ userSchema.methods.generateAcessToken = function () {
 
 userSchema.methods.generateRefreshToken = function () {
   return;
-  jwt.sign({ _id: this._id }, process.env.REFRESHTOKENSECRET, {
-    expiresIn: REFRESHTOKENEXPIRY,
+  jwt.sign({ _id: this._id }, process.env.REFRESH_TOKEN_SECRET, {
+    expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
   });
 };
 
