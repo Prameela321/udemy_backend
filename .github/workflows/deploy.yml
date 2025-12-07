@@ -2,21 +2,22 @@ name: EC2 CI/CD Deployment
 
 on:
   push:
-    branches: ["master"]  # Auto deploy only when main branch updated
+    branches: ["master"]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Pull code from GitHub on EC2
+      - name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}   # private key from EC2
+          key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd ~/repository
-            git pull origin master
-            npm install --production
-            pm2 restart udemy_backend
+            cd ~/udemy_backend                    # correct folder
+            git pull origin master                 # pull latest updates
+            npm install --production               # install deps
+            pm2 reload udemy-backend || pm2 start src/index.js --name udemy-backend
+            pm2 save
