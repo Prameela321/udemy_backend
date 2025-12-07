@@ -17,6 +17,6 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}   # private key from EC2
           script: |
             cd ~/repository
-            git pull origin main
+            git pull origin master
             npm install --production
-            pm2 restart myapp
+            pm2 restart udemy_backend
