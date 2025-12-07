@@ -21,3 +21,6 @@ connectDB()
 app.get("/", (req, res) => {
   res.send("Server is running!");
 });
+app.get("/test", (req, res) => {
+  res.send("Test CI/CD is running!");
+});
