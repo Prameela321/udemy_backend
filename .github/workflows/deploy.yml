@@ -1,0 +1,22 @@
+name: EC2 CI/CD Deployment
+
+on:
+  push:
+    branches: ["master"]  # Auto deploy only when main branch updated
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Pull code from GitHub on EC2
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}   # private key from EC2
+          script: |
+            cd ~/repository
+            git pull origin main
+            npm install --production
+            pm2 restart myapp
